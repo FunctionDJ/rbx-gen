@@ -1,0 +1,4 @@
+{
+  "ext": "ts",
+  "exec": "npx ts-node main.ts"
+}
