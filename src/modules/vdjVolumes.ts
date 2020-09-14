@@ -30,7 +30,7 @@ const volumesPromise: Promise<string[]> = new Promise(async res => {
   })
 
   const vdjVolumes = (await Promise.all(vdjVolumesPromises))
-    .filter(p => p !== null)
+    .filter(p => p !== null) as string[]
 
   vdjVolumes.push(path.join(getDocumentsFolder(), "VirtualDJ"))
 

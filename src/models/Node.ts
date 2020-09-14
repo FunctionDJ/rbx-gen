@@ -6,29 +6,23 @@ export abstract class Node {
   public readonly type: number = 0
   public readonly count: number = 0
 
-  constructor(name: string, type: number) {
+  constructor(name: string) {
     this.name = name
-    this.type = type
   }
 
   getXMLReady(): any {}
 }
 
 export class StructNode extends Node {
-  public readonly count: number
   public childNodes: Node[] = []
-
-  constructor(name: string, type: number, count: number) {
-    super(name, type)
-    this.count = count
-  }
+  public readonly type = 0
 
   getXMLReady() {
     return {
       $: {
         Type: this.type,
         Name: this.name,
-        Count: this.count
+        Count: this.childNodes.length
       },
       NODE: this.childNodes.map(c => c.getXMLReady())
     }
@@ -36,13 +30,13 @@ export class StructNode extends Node {
 }
 
 export class PlaylistNode extends Node {
-  public readonly keyType: number
+  public readonly keyType: number = 0
   public readonly tracks: Track[] = []
   private rekordbox: Rekordbox
+  public readonly type = 1
 
-  constructor(name: string, type: number, keyType: number, rekordbox: Rekordbox) {
-    super(name, type)
-    this.keyType = keyType
+  constructor(name: string, rekordbox: Rekordbox) {
+    super(name)
     this.rekordbox = rekordbox
   }
 

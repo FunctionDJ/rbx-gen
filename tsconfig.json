@@ -3,11 +3,13 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es6",
+    "target": "ES2018",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "outDir": "dist",
     "baseUrl": ".",
+    "strictNullChecks": true,
+    "strict": true,
     "paths": {
       "*": [
         "node_modules/*",

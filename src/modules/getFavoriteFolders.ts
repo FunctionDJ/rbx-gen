@@ -2,7 +2,7 @@ import volumes from "./vdjVolumes"
 import { promises as fs } from "fs"
 import path from "path"
 import xml2js from "xml2js"
-import { asyncMap } from "./asyncHelpers"
+import { asyncMap } from "../functions/asyncHelpers"
 
 export type FavoriteFolder = {
   fullPath: string
@@ -15,7 +15,7 @@ export type FolderFile = {
 }
 
 export default async (): Promise<FavoriteFolder[]> => {
-  const allvdjFolderFiles: FolderFile[] = await (await volumes).reduce(async (prev, folder) => {
+  const allvdjFolderFiles: FolderFile[] = await (await volumes).reduce(async (prev: Promise<FolderFile[]>, folder) => {
     const dirents = await fs.readdir(path.join(folder, "Folders"), {
       withFileTypes: true
     })

@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/cli-progress": "^3.8.0",
+    "@types/typescript": "^2.0.0",
     "@types/xml2js": "^0.4.5",
     "cli-progress": "^3.8.2",
     "node-id3": "^0.1.18",

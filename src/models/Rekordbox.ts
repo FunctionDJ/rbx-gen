@@ -16,7 +16,7 @@ export default class Rekordbox {
   }
 
   constructor() {
-    this.rootNode = new StructNode("ROOT", 0, 0)
+    this.rootNode = new StructNode("ROOT")
   }
 
   getXML() {
