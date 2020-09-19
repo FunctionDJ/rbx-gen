@@ -8,7 +8,7 @@ class Color {
 
 export abstract class PositionMark {
   public name: string = ""
-  public readonly type: number
+  public readonly type: number = -1
   public color?: Color
 
   constructor(

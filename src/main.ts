@@ -13,6 +13,10 @@ import sleep from "./functions/sleep"
 import getNativePlaylistRoot from "./modules/getNativePlaylistRoot"
 import getTrackData from "./modules/getTrackData"
 import flattenArray from "./functions/flattenArray"
+import VirtualDJ, { Database } from "./models/VirtualDJ"
+import TruePath from "./classes/TruePath"
+import volumesPromise from "./modules/vdjVolumes"
+import { CueMark, PositionMark } from "./models/PositionMark"
 
 const isFile = (line: string) => {
   const info = path.parse(line)
@@ -25,8 +29,24 @@ const isNotComment = (line: string) => {
 
 const attachTrackLine = async (trackLine: string, playlist: PlaylistNode, playlistFileInfo: path.ParsedPath) => {
   const absoluteFilePath = path.resolve(playlistFileInfo.dir, trackLine)
+  const truePath = new TruePath(absoluteFilePath)
 
-  const track = new Track(await getTrackData(absoluteFilePath))
+  const masterbase = VirtualDJ.getMasterbase()
+
+  const track = new Track(await getTrackData(truePath, masterbase))
+  const vdjEntry = masterbase.songs.get(truePath)
+  
+  track.positionMarks = vdjEntry?.pois
+    .filter(p => p.pos && p.num)
+    .map(poi => {
+      const cueMark = new CueMark(poi.pos as number, poi.num as number)
+
+      if (poi.name) {
+        cueMark.name = poi.name
+      }
+
+      return cueMark
+    }) ?? []
 
   playlist.addTrack(track)
 }
@@ -91,6 +111,11 @@ type PlaylistFile = readdirp.EntryInfo & {
 
   const playlistFiles = flattenArray(playlistFilesNested)
 
+  console.log("Creating VirtualDJ Database models...")
+
+  await VirtualDJ.readDatabases((await volumesPromise)
+    .map(v => new TruePath(path.join(v, "database.xml"))))
+
   const rekordbox = new Rekordbox()
 
   console.log("Creating Rekordbox model...")
@@ -129,6 +154,10 @@ type PlaylistFile = readdirp.EntryInfo & {
   modelBar.stop()
 
   const target = "./build/rekordbox.xml"
+
+  try {
+    await fs.mkdir("./build/")
+  } catch (e) {}
 
   console.log("Generating XML and writing...")
   await fs.writeFile(target, rekordbox.getXML())
