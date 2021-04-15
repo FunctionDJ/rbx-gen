@@ -1,3 +1,8 @@
+# This repository is deprecated. VirtualDJ now has a native CDJ-Export feature.
+## Feature demo video: https://youtu.be/bb37Pt-rdDo
+## VDJ Manual: https://virtualdj.com/manuals/virtualdj/interface/database/cdjexport/index.html
+
+
 # rbx-gen
 (name not final, duh)
 
